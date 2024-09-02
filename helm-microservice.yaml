@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helm-microservice-deployment
+  labels:
+    app: helm-microservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: helm-microservice
+  template:
+    metadata:
+      labels:
+        app: helm-microservice
+    spec:
+      containers:
+      - name: helm-microservice
+        image: satovar/helm-microservice:1.0
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helm-microservice-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: helm-microservice
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
